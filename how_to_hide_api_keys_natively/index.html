@@ -31,7 +31,7 @@ If you&rsquo;re like me you have many API integrations you&rsquo;ve created, and
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/mikemayops.github.io\/how_to_hide_api_keys_natively\/"
-        },"genre": "posts","wordcount":  947 ,
+        },"genre": "posts","wordcount":  948 ,
         "url": "https:\/\/mikemayops.github.io\/how_to_hide_api_keys_natively\/","datePublished": "2020-11-16T20:05:06-05:00","dateModified": "2020-11-16T20:05:06-05:00","publisher": {
             "@type": "Organization",
             "name": ""},"author": {
@@ -105,7 +105,7 @@ If you&rsquo;re like me you have many API integrations you&rsquo;ve created, and
 <main class="main">
                 <div class="container"><article class="page single"><h1 class="single-title animated flipInX">How to Hide Api Keys Natively</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Michael Mayoral</a></span>&nbsp;<span class="post-category">included in <a href="/categories/powershell/"><i class="far fa-folder fa-fw"></i>PowerShell</a>&nbsp;<a href="/categories/security/"><i class="far fa-folder fa-fw"></i>Security</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-11-16">2020-11-16</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;947 words&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-11-16">2020-11-16</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;948 words&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;5 minutes&nbsp;</div>
         </div><div class="featured-image"><img
         class="lazyload"
@@ -174,7 +174,7 @@ We&rsquo;re going to be using <code>ConvertTo-SecureString</code> and <code>Conv
 
 </code></pre></td></tr></table>
 </div>
-</div><p>Now, before we move on, there&rsquo;s something that it&rsquo;s important to note from above. All that <code>ConvertTo-SecureString</code> is doing is obfuscating the string, it is <em><strong>not</strong></em> encrypting its conents. By obfuscating, all the PowerShell host is going to do is print <code>System.Secure.SecureString</code> when referencing it. It&rsquo;s placing this value in a &ldquo;Special&rdquo; place in memory:</p>
+</div><p>Now, before we move on, there&rsquo;s something that it&rsquo;s important to note from above. All that <code>ConvertTo-SecureString</code> is doing is obfuscating the string, it is <em><strong>not</strong></em> encrypting its contents. By obfuscating, all the PowerShell host is going to do is print <code>System.Secure.SecureString</code> when referencing it. It&rsquo;s placing this value in a &ldquo;Special&rdquo; place in memory:</p>
 <p><br>
 <figure>
     <img src="SecureStringEx1.JPG"/> <figcaption>
@@ -182,7 +182,7 @@ We&rsquo;re going to be using <code>ConvertTo-SecureString</code> and <code>Conv
         </figcaption>
 </figure>
 </p>
-<p>To actually encrypt the string ( as counter intuitive as it sounds ) you need to pass this generated <code>SecureSting</code> to  <code>ConvertFrom-SecureString</code>. This was a bit confusing for me at first because &ldquo;obviously&rdquo; if you want to convert <em>from</em> a <code>SecureString</code> it will just turn into the <em><strong>un-secure</strong></em> version of it, duh! But actually, this command is <em>encrypting</em> the string.</p>
+<p>To actually encrypt the string ( as counter intuitive as it sounds ) you need to pass this generated <code>SecureString</code> to  <code>ConvertFrom-SecureString</code>. This was a bit confusing for me at first because &ldquo;obviously&rdquo; if you want to convert <em>from</em> a <code>SecureString</code> it will just turn into the <em><strong>un-secure</strong></em> version of it, duh! But actually, this command is <em>encrypting</em> the string.</p>
 <div class="details admonition info open">
         <div class="details-summary admonition-title">
             <i class="icon fas fa-info-circle fa-fw"></i>Important<i class="details-icon fas fa-angle-right fa-fw"></i>
@@ -226,14 +226,14 @@ Note in the above script I found that we&rsquo;re able to use the parameter <cod
         </figcaption>
 </figure>
 </p>
-<p>Now you have a script you can run once from the PowerShell console save your Secrets. Just make sure you run it on the computer and under the user account you intend to run your API scripts!</p>
+<p>Now you have a script you can run once from the PowerShell console and save your Secrets. Just make sure you run it on the computer and under the user account you intend to run your API scripts!</p>
 <h2 id="retrieving-your-secrets">Retrieving Your Secrets</h2>
-<p>Now that we have our API keys tucked away safely we need a way to un-encrypt and use them. For this we&rsquo;re making use of <code>[System.Runtime.InteropServices.Marshal]</code> .Net Type. For this example, I&rsquo;m leaning towards making the unecryption process Function since you would pontentially be needing to retrieve the secrets multiple times throughout your script.</p>
+<p>Now that we have our API keys tucked away safely we need a way to unencrypt and use them. For this we&rsquo;re making use of <code>[System.Runtime.InteropServices.Marshal]</code> .Net Type. For this example, I&rsquo;m leaning towards making the unencryption process Function since you would pontentially be needing to retrieve the secrets multiple times throughout your script.</p>
 <p><br>
 <script type="application/javascript" src="https://gist.github.com/mikemayops/04013275455c7ff4a9591b525fb3c579.js"></script>
 </p>
 <p><br>
-Now that you&rsquo;ve decrypted your <em><strong>Key</strong></em> and <em><strong>Url</strong></em> you can use it to later on your script build your API Authorization headers. But, before we call it a day, it&rsquo;s important that after you&rsquo;re done using your secrets you clear the encrypted variables from memory <i class="far fa-smile-wink"></i>:</p>
+Now that you&rsquo;ve decrypted your <em><strong>Key</strong></em> and <em><strong>Url</strong></em> you can use it later on your script to build your API Authorization headers. But, before we call it a day, it&rsquo;s important that after you&rsquo;re done using your secrets you clear the encrypted variables from memory <i class="far fa-smile-wink"></i>:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt">1

@@ -42,12 +42,12 @@ $secureValue.url = $url | ConvertTo-SecureString -AsPlainText -Force | ConvertFr
 $secureValue.key = $key | ConvertTo-SecureString -AsPlainText -Force | ConvertFrom-SecureString
 
 ```
-Now, before we move on, there's something that it's important to note from above. All that `ConvertTo-SecureString` is doing is obfuscating the string, it is _**not**_ encrypting its conents. By obfuscating, all the PowerShell host is going to do is print `System.Secure.SecureString` when referencing it. It's placing this value in a "Special" place in memory:
+Now, before we move on, there's something that it's important to note from above. All that `ConvertTo-SecureString` is doing is obfuscating the string, it is _**not**_ encrypting its contents. By obfuscating, all the PowerShell host is going to do is print `System.Secure.SecureString` when referencing it. It's placing this value in a "Special" place in memory:
 
 \
 {{< figure src="SecureStringEx1.JPG" title="Secure String" >}}
 
-To actually encrypt the string ( as counter intuitive as it sounds ) you need to pass this generated `SecureSting` to  `ConvertFrom-SecureString`. This was a bit confusing for me at first because "obviously" if you want to convert *from* a `SecureString` it will just turn into the ***un-secure*** version of it, duh! But actually, this command is *encrypting* the string. 
+To actually encrypt the string ( as counter intuitive as it sounds ) you need to pass this generated `SecureString` to  `ConvertFrom-SecureString`. This was a bit confusing for me at first because "obviously" if you want to convert *from* a `SecureString` it will just turn into the ***un-secure*** version of it, duh! But actually, this command is *encrypting* the string. 
 
 {{<admonition info "Important">}}
 If no key is specified the `ConvertFrom-SecureString` Cmdlet encrypts the data with the Windows Data Protection API (DPAPI), which uses  _**Machine**_ and _**User**_ specific cyphers, meaning that you can't decypher the generated encrypted string from a different machine if the file is copied. 
@@ -79,11 +79,11 @@ Note in the above script I found that we're able to use the parameter `-AsSecure
 {{< figure src="NewApiConfigEx.JPG" title="NewApiConfigFile.ps1 in Action" >}}
 
 
-Now you have a script you can run once from the PowerShell console save your Secrets. Just make sure you run it on the computer and under the user account you intend to run your API scripts!
+Now you have a script you can run once from the PowerShell console and save your Secrets. Just make sure you run it on the computer and under the user account you intend to run your API scripts!
 
 ## Retrieving Your Secrets
 
-Now that we have our API keys tucked away safely we need a way to un-encrypt and use them. For this we're making use of `[System.Runtime.InteropServices.Marshal]` .Net Type. For this example, I'm leaning towards making the unecryption process Function since you would pontentially be needing to retrieve the secrets multiple times throughout your script.
+Now that we have our API keys tucked away safely we need a way to unencrypt and use them. For this we're making use of `[System.Runtime.InteropServices.Marshal]` .Net Type. For this example, I'm leaning towards making the unencryption process Function since you would pontentially be needing to retrieve the secrets multiple times throughout your script.
 
 \
 {{< gist mikemayops 04013275455c7ff4a9591b525fb3c579 >}}
@@ -91,7 +91,7 @@ Now that we have our API keys tucked away safely we need a way to un-encrypt and
 
 
 \
-Now that you've decrypted your ***Key*** and ***Url*** you can use it to later on your script build your API Authorization headers. But, before we call it a day, it's important that after you're done using your secrets you clear the encrypted variables from memory :(far fa-smile-wink):: 
+Now that you've decrypted your ***Key*** and ***Url*** you can use it later on your script to build your API Authorization headers. But, before we call it a day, it's important that after you're done using your secrets you clear the encrypted variables from memory :(far fa-smile-wink):: 
 
 
 ```powershell
